@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Pastebin</title>
+</head>
+<body>
+  <h1>Create Paste</h1>
+
+  <textarea id="content" rows="6" cols="50"></textarea><br><br>
+  <button onclick="createPaste()">Create</button>
+
+  <p id="result"></p>
+
+  <script src="./intern.js">
+    async function createPaste() {
+      const content = document.getElementById("content").value;
+
+      const res = await fetch("/api/pastes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        document.getElementById("result").innerHTML =
+          `<a href="${data.url}">${data.url}</a>`;
+      } else {
+        alert(data.error);
+      }
+    }
+  </script>
+</body>
+</html>
